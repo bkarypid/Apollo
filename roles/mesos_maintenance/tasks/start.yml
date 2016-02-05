@@ -1,0 +1,16 @@
+# start maintenance
+- name: deploy machines template
+  sudo: yes
+  sudo_user: root
+  template:
+    src: machine.json.j2
+    dest: /tmp/machines.json
+  when: mesos_maintenance_start
+  tags:
+    - mesos-maintenance
+
+- name: start maintenance
+  shell: "curl -XPOST -x '' http://{{ mesos_maintenance_master_url }}/master/machine/down -d@/tmp/machines.json -H 'Content-type: application/json'"
+  register: start_content
+  when: mesos_maintenance_start
+

@@ -1,0 +1,5 @@
+# complete maintenance
+- name: complete maintenance
+  shell: "curl -XPOST -x '' http://{{ mesos_maintenance_master_url }}/master/machine/up -d@/tmp/machines.json -H 'Content-type: application/json'"
+  register: complete_content
+  when: mesos_maintenance_complete

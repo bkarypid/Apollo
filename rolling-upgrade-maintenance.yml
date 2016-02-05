@@ -1,0 +1,45 @@
+---
+- hosts: mesos_masters
+  serial: "{{ serial | default(1) }}"
+  roles:
+    - { role: zookeeper, tags: ["zookeeper"] }
+    - { role: consul, tags: ["consul"] }
+    - { role: weave, tags: ["weave"] }
+    - { role: docker, tags: ["docker"] }
+    - { role: registrator, tags: ["registrator"] }
+
+- hosts: mesos_slaves
+  serial: "{{ serial | default(1) }}"
+
+  # pre_tasks:
+  #   - action: ec2_facts
+  #   - name: "De-register slave with load balancer"
+  #     local_action:
+  #       module: ec2_elb
+  #       instance_id: "{{ ansible_ec2_instance_id }}"
+  #       state: absent
+  #       wait: yes
+  #     sudo: false
+  #     register: old_ec2_elbs
+  #     tags: ["aws"]
+
+  roles:
+    - { role: mesos_maintenance, tags: ["mesos_maintenance"], mesos_maintenance_schedule: true }
+    - { role: mesos_maintenance, tags: ["mesos_maintenance"], mesos_maintenance_start: true }
+    - { role: consul, tags: ["consul"] }
+    - { role: weave, tags: ["weave"] }
+    - { role: docker, tags: ["docker"] }
+    - { role: registrator, tags: ["registrator"] }
+    - { role: traefik, tags: ["traefik"] }
+    - { role: mesos_maintenance, tags: ["mesos_maintenance"], mesos_maintenance_complete: true }
+
+  # post_tasks:
+  #   - name: "Register slave with load balancer"
+  #     local_action:
+  #       module: ec2_elb
+  #       ec2_elbs: "{{ old_ec2_elbs.ansible_facts.ec2_elbs }}"
+  #       instance_id: "{{ ansible_ec2_instance_id }}"
+  #       state: present
+  #       wait: yes
+  #     sudo: false
+  #     tags: ["aws"]

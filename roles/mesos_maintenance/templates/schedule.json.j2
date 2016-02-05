@@ -1,0 +1,15 @@
+{
+  "windows" : [
+  {%- for host in groups[mesos_maintenance_server_group] -%}
+    {
+      "machine_ids" : [
+        { "hostname" : "{{ host }}", "ip" : "{{ hostvars[host].ansible_default_ipv4.address }}" }
+      ],
+      "unavailability" : {
+        "start" : { "seconds" : {{ lookup('pipe','date +%Y%m%d%H%M%S')|int + 60|int }} },
+        "duration" : { "seconds" : 60 }
+      }
+    }{% if not loop.last %},{% endif %}
+  {%- endfor -%}
+  ]
+}
