@@ -149,8 +149,6 @@ ansible_upgrade_maintenance() {
 }
 
 install_contributed_roles() {
-  export http_proxy=http://94.126.104.207:8080
-  export https_proxy=http://94.126.104.207:8080
   pushd "${APOLLO_ROOT}"
     ansible-galaxy install --force -r contrib-plugins/plugins.yml
     ansible-galaxy install --force -r requirements.yml
