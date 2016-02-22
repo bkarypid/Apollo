@@ -25,6 +25,10 @@
       dest: "/etc/systemd/system/weaveproxy.service"
   tags:
     - weave
+  notify:
+    - reload systemd
+    - restart weave service
+    - restart weaveproxy service
 
 - name: ensure weave service is running.
   sudo: yes
