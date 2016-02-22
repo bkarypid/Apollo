@@ -7,10 +7,3 @@
     dest: /tmp/schedule.json
   run_once: true
   when: mesos_maintenance_schedule
-  tags:
-    - mesos-maintenance
-
-- name: schedule maintenance
-  shell: "curl -XPOST -x '' http://{{ mesos_maintenance_master_url }}/master/maintenance/schedule -d@/tmp/schedule.json -H 'Content-type: application/json'"
-  register: schedule_content
-  when: mesos_maintenance_schedule

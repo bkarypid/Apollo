@@ -132,8 +132,8 @@ ansible_playbook_run() {
     get_ansible_inventory
     install_contributed_roles
     ansible-playbook --inventory-file="${APOLLO_ROOT}/${APOLLO_INVENTORY}" \
+    --tags "${ANSIBLE_TAGS:-all}" \
     ${ANSIBLE_LOG} --extra-vars "$( get_apollo_variables  APOLLO_)" \
-    ${ANSIBLE_EXARGS:-} \
     ${APOLLO_PLAYBOOK}
   popd
 }
