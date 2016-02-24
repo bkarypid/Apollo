@@ -46,7 +46,7 @@ frontend www
     default_backend mesos_slaves
 
 backend qa_mailcatcher_smtp
-  mode tcp{{range service "qa.mailh:qog-smtp" }}
+  mode tcp{{range service "qa.mailhlog-smtp" }}
   server {{.ID}} {{.Address}}:{{.Port}} check{{end}}
 
 backend qt_mailcatcher_smtp
