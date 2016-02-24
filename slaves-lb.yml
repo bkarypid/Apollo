@@ -7,6 +7,9 @@
       sudo: False
       when: bastion_ip is not defined
 
+- include: playbooks/coreos-bootstrap.yml
+
+- hosts: slaves_load_balancers:!role=bastion
   roles:
     - docker
     - weave

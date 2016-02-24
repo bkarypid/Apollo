@@ -46,5 +46,5 @@ load_balancers
 [marathon_servers:children]
 mesos_masters
 
-[slave_load_balancers]
+[slaves_load_balancers]
 coreoslb01
