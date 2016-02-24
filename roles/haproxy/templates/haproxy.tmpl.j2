@@ -32,7 +32,7 @@ backend qt_mailcatcher_smtp
     server {{.ID}} {{.Address}}:{{.Port}} check{{end}}
 
 backend mesos_slaves
-    server coreos04 curl 0.0.0.0:80 check
+    server coreos04 10.66.1.158:80 check
     server coreos05 10.66.1.159:80 check
     server coreos06 10.66.1.160:80 check
 {% endraw %}
