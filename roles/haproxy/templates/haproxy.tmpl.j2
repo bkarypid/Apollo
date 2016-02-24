@@ -46,11 +46,11 @@ frontend www
     default_backend mesos_slaves
 
 backend qa_mailcatcher_smtp
-  mode tcp{{range service "qa.mailog-smtp" }}
+  mode tcp{{range service "qa.mailh:qog-smtp" }}
   server {{.ID}} {{.Address}}:{{.Port}} check{{end}}
 
 backend qt_mailcatcher_smtp
-  mode tcp{{range service "qt.mailog-smtp" }}
+  mode tcp{{range service "qt.mailhog-smtp" }}
   server {{.ID}} {{.Address}}:{{.Port}} check{{end}}
 
 backend mesos_slaves
@@ -58,5 +58,5 @@ backend mesos_slaves
   balance roundrobin
   server coreos04 check
   server coreos05 check
-  server coreos056 check
+  server coreos06 check
 {% endraw %}
