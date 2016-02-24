@@ -30,32 +30,31 @@ frontend haproxy_status
     monitor-uri /haproxy_status
     monitor fail if backend_dead
 
-frontend qa_mailcatcher_smtp
-  bind :1025 name smtp
-  mode tcp
-  default_backend qa_mailcatcher_smtp
+#frontend qa_mailcatcher_smtp
+#    bind :1025 name smtp
+#    mode tcp
+#    default_backend qa_mailcatcher_smtp
 
-frontend qt_mailcatcher_smtp
-  bind :1026 name smtp
-  mode tcp
-  default_backend qt_mailcatcher_smtp
+#frontend qt_mailcatcher_smtp
+#    bind :1026 name smtp
+#    mode tcp
+#    default_backend qt_mailcatcher_smtp
 
 frontend www
-    bind *:80
-    mode tcp
+    bind *:80 name meh
     default_backend mesos_slaves
 
-backend qa_mailcatcher_smtp
-  mode tcp{{range service "qa.mailhog-smtp" }}
-  server {{.ID}} {{.Address}}:{{.Port}} check{{end}}
+#backend qa_mailcatcher_smtp
+#    mode tcp{{range service "qa.mailhog-smtp" }}
+#    server {{.ID}} {{.Address}}:{{.Port}} check{{end}}
 
-backend qt_mailcatcher_smtp
-  mode tcp{{range service "qt.mailhog-smtp" }}
-  server {{.ID}} {{.Address}}:{{.Port}} check{{end}}
+#backend qt_mailcatcher_smtp
+#    mode tcp{{range service "qt.mailhog-smtp" }}
+#    server {{.ID}} {{.Address}}:{{.Port}} check{{end}}
 
 backend mesos_slaves
-  mode tcp
-  server coreos04 10.66.1.158:80 check
-  server coreos05 10.66.1.159:80 check
-  server coreos06 10.66.1.160:80 check
+    mode tcp
+    server coreos04 10.66.1.158:80 check
+    server coreos05 10.66.1.159:80 check
+    server coreos06 10.66.1.160:80 check
 {% endraw %}
