@@ -1,4 +1,3 @@
-{% raw %}
 global
     maxconn {{or (key "service/haproxy/maxconn") 256}}
     debug
@@ -9,52 +8,11 @@ defaults
     timeout client {{or (key "service/haproxy/timeouts/client") "50000ms"}}
     timeout server {{or (key "service/haproxy/timeouts/server") "50000ms"}}
 
-# https://www.datadoghq.com/blog/how-to-collect-haproxy-metrics/
-listen stats :9000
-  mode http
-  stats enable
-  stats hide-version
-  stats realm Haproxy\ Statistics
-  stats uri /haproxy_stats
-{% endraw %}
-  stats auth {{ haproxy_username }}:{{ haproxy_password }}
-
-{% raw %}
-# frontend used to return health status without requiring SSL
-frontend haproxy_status
-    bind 0.0.0.0:34180      # 34180 means EALTH ;)
-    # create a status URI in /haproxy_status that will return
-    # a 200 is backend is healthy, and 503 if it isn't. This
-    # URI is queried by the ELB.
-    acl backend_dead nbsrv(consul_backend) lt 1
-    monitor-uri /haproxy_status
-    monitor fail if backend_dead
-
-#frontend qa_mailcatcher_smtp
-#    bind :1025 name smtp
-#    mode tcp
-#    default_backend qa_mailcatcher_smtp
-
-#frontend qt_mailcatcher_smtp
-#    bind :1026 name smtp
-#    mode tcp
-#    default_backend qt_mailcatcher_smtp
-
 frontend www
     bind *:80 name meh
     default_backend mesos_slaves
 
-#backend qa_mailcatcher_smtp
-#    mode tcp{{range service "qa.mailhog-smtp" }}
-#    server {{.ID}} {{.Address}}:{{.Port}} check{{end}}
-
-#backend qt_mailcatcher_smtp
-#    mode tcp{{range service "qt.mailhog-smtp" }}
-#    server {{.ID}} {{.Address}}:{{.Port}} check{{end}}
-
 backend mesos_slaves
-    mode tcp
     server coreos04 10.66.1.158:80 check
     server coreos05 10.66.1.159:80 check
     server coreos06 10.66.1.160:80 check
-{% endraw %}
