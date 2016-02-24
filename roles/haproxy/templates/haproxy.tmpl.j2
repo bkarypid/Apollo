@@ -55,8 +55,7 @@ backend qt_mailcatcher_smtp
 
 backend mesos_slaves
   mode tcp
-  balance roundrobin
-  server coreos04 check
-  server coreos05 check
-  server coreos06 check
+  server coreos04 10.66.1.158:80 check
+  server coreos05 10.66.1.159:80 check
+  server coreos06 10.66.1.160:80 check
 {% endraw %}
