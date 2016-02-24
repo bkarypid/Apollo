@@ -4,6 +4,7 @@
   file:
     path: "{{ consul_template_dir }}/{{ item.path }}"
     state: directory
+  sudo: yes
   with_items:
     - { path: 'config' }
     - { path: 'templates' }

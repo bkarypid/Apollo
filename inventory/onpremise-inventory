@@ -12,6 +12,9 @@ coreos[01:03]
 [role=mesos_slaves]
 coreos[04:06]
 
+[role=slaves_load_balancers]
+coreoslb01
+
 [mesos_masters:children]
 role=mesos_masters
 
@@ -21,10 +24,14 @@ role=mesos_slaves
 [load_balancers:children]
 mesos_slaves
 
+[slaves_load_balancers:children]
+role=slaves_load_balancers
+
 [all:children]
 mesos_masters
 mesos_slaves
 load_balancers
+slaves_load_balancers
 
 [role=mesos_masters:vars]
 ansible_python_interpreter="PATH=/home/core/bin:$PATH python"
@@ -46,5 +53,3 @@ load_balancers
 [marathon_servers:children]
 mesos_masters
 
-[slaves_load_balancers]
-coreoslb01
