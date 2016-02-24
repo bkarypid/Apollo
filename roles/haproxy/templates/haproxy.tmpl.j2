@@ -4,9 +4,9 @@ global
 
 defaults
     mode http
-    timeout connect {{or (key "service/haproxy/timeouts/connect") "5000ms"}}
-    timeout client {{or (key "service/haproxy/timeouts/client") "50000ms"}}
-    timeout server {{or (key "service/haproxy/timeouts/server") "50000ms"}}
+    timeout connect "5000ms"
+    timeout client  "50000ms"
+    timeout server  "50000ms"
 
 frontend www
     bind *:80 name meh
