@@ -25,12 +25,26 @@ frontend www
     bind *:80
     default_backend mesos_slaves
 
+    acl acl_qa_mailhog hdr(host) -i mailcatcher.qa.service.vcloud
+    use_backend qa_mailhog if acl_qa_mailhog
+
+    acl acl_qt_mailhog hdr(host) -i mailcatcher.qt.service.vcloud
+    use_backend qt_mailhog if acl_qt_mailhog
+
+backend qa_mailhog
+    {{range service "qa.mailhog-http" }}
+    server {{.ID}} {{.Address}}:{{.Port}} check{{end}}
+
+backend qt_mailhog
+    {{range service "qt.mailhog-http" }}
+    server {{.ID}} {{.Address}}:{{.Port}} check{{end}}
+
 backend qa_mailcatcher_smtp
-    mode tcp{{range service "qa.mailhog-smtp" }}
+    {{range service "qa.mailhog-smtp" }}
     server {{.ID}} {{.Address}}:{{.Port}} check{{end}}
 
 backend qt_mailcatcher_smtp
-    mode tcp{{range service "qt.mailhog-smtp" }}
+    {{range service "qt.mailhog-smtp" }}
     server {{.ID}} {{.Address}}:{{.Port}} check{{end}}
 
 backend mesos_slaves
