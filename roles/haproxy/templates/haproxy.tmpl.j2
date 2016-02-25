@@ -8,16 +8,7 @@ defaults
     timeout connect {{or (key "service/haproxy/timeouts/connect") "5000ms"}}
     timeout client {{or (key "service/haproxy/timeouts/client") "50000ms"}}
     timeout server {{or (key "service/haproxy/timeouts/server") "50000ms"}}
-
-# https://www.datadoghq.com/blog/how-to-collect-haproxy-metrics/
-listen stats :9000
-  mode http
-  stats enable
-  stats hide-version
-  stats realm Haproxy\ Statistics
-  stats uri /haproxy_stats
 {% endraw %}
-  stats auth {{ haproxy_username }}:{{ haproxy_password }}
 
 {% raw %}
 frontend qa_mailcatcher_smtp
