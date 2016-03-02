@@ -5,6 +5,7 @@ APOLLO_ROOT=$(dirname "${BASH_SOURCE}")/..
 DEFAULT_CONFIG="${APOLLO_ROOT}/bootstrap/${APOLLO_PROVIDER}/${APOLLO_CONFIG_FILE-"config-default.sh"}"
 APOLLO_INVENTORY="${APOLLO_INVENTORY-inventory}"
 APOLLO_PLAYBOOK="${APOLLO_PLAYBOOK-site.yml}"
+APOLLO_TF_ROOT="${APOLLO_TF_ROOT:-$( ${APOLLO_ROOT}/terraform/${APOLLO_PROVIDER})}"
 
 if [ -f "${DEFAULT_CONFIG}" ]; then
   source "${DEFAULT_CONFIG}"
@@ -100,7 +101,7 @@ get_master_url() {
   if [[ $APOLLO_PROVIDER == "vagrant" ]]; then
     master_url="http://master1"
   else
-    pushd "${APOLLO_ROOT}/terraform/${APOLLO_PROVIDER}" > /dev/null
+    pushd "${APOLLO_TF_ROOT}" > /dev/null
       master_url="http://$(terraform output master.1.ip)"
     popd > /dev/null
   fi
@@ -171,7 +172,7 @@ get_ansible_inventory() {
 }
 
 get_terraform_modules() {
-  pushd "${APOLLO_ROOT}/terraform/${APOLLO_PROVIDER}"
+  pushd "${APOLLO_TF_ROOT}"
     # Downloads terraform modules.
     terraform get
 
@@ -186,8 +187,8 @@ get_terraform_modules() {
 }
 
 terraform_apply() {
-  pushd "${APOLLO_ROOT}/terraform/${APOLLO_PROVIDER}"
-    terraform apply
+  pushd "${APOLLO_TF_ROOT}"
+    terraform apply $APOLLO_TF_OPTS
   popd
 }
 
